@@ -1,6 +1,6 @@
 package com.example.vinilos.data.remote
 
-import com.example.vinilos.data.model.Post
+import com.example.vinilos.data.model.Vinyl
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Body
@@ -10,17 +10,22 @@ import retrofit2.http.PUT
 
 interface ApiService {
 
-    @GET("posts")
-    suspend fun getPosts(): List<Post>
+    @GET("products")
+    suspend fun getProducts(): List<Vinyl>
 
-    @POST("posts")
-    suspend fun createPost(@Body post: Post): Post
+    @GET("products/{id}")
+    suspend fun getProduct(@Path("id") id: Int): Vinyl
 
-    @PUT("posts/{id}")
-    suspend fun updatePost(@Path("id") id: Int, @Body post: Post): Post
+    @POST("products")
+    suspend fun createProduct(@Body product: Vinyl): Vinyl
 
-    @DELETE("posts/{id}")
-    suspend fun deletePost(@Path("id") id: Int): Unit
+    @PUT("products/{id}")
+    suspend fun updateProduct(@Path("id") id: Int, @Body vinyl: Vinyl): Vinyl
+
+    @DELETE("products/{id}")
+    suspend fun deleteProduct(@Path("id") id: Int)
+
+
 }
 
 

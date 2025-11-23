@@ -15,15 +15,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.vinilos.auth.LoginScreen
-import com.example.vinilos.ui.screens.HomeScreen
 import com.example.vinilos.ui.screens.ProductScreen
 import com.example.vinilos.ui.screens.ContactScreen
 import com.example.vinilos.ui.screens.ProfileScreen
 import com.example.vinilos.auth.RegisterScreen
 import com.example.vinilos.data.model.SampleVinyls
 import com.example.vinilos.data.repository.AuthRepository
+import com.example.vinilos.ui.screens.ApiScreen
 import com.example.vinilos.ui.screens.CartScreen
+import com.example.vinilos.ui.screens.HomeScreen
 import com.example.vinilos.ui.screens.ProductDetailScreen
+import com.example.vinilos.viewmodel.ApiViewModel
 import com.example.vinilos.viewmodel.AuthViewModel
 import com.example.vinilos.viewmodel.AuthViewModelFactory
 import com.example.vinilos.viewmodel.CartViewModel
@@ -31,9 +33,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 
-
 @Composable
-fun AppNavigation(){
+fun AppNavigation() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val authViewModel: AuthViewModel = viewModel(
@@ -43,7 +44,7 @@ fun AppNavigation(){
 
     val startDestination = if (Firebase.auth.currentUser != null) Routes.HOME else Routes.LOGIN
 
-    val noBottomBarRoutes = listOf( Routes.LOGIN, Routes.REGISTER)
+    val noBottomBarRoutes = listOf(Routes.LOGIN, Routes.REGISTER)
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -87,9 +88,11 @@ fun AppNavigation(){
                 HomeScreen(
                     onViewDetail = { id ->
                         navController.navigate(Routes.detailRoute(id))
-                    }
+                    },
+                    onOpenApi = { navController.navigate(Routes.API) }
                 )
             }
+
 
             composable(Routes.PRODUCTS) {
                 ProductScreen(
@@ -102,7 +105,7 @@ fun AppNavigation(){
 
             composable(
                 route = Routes.DETAIL,
-                arguments = listOf(navArgument("id") { type = NavType.IntType})
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
             ) { entry ->
                 val id = entry.arguments?.getInt("id")!!
                 val vinyl = SampleVinyls.vinyls.find { it.id == id }
@@ -138,6 +141,14 @@ fun AppNavigation(){
             composable(Routes.CART) {
                 CartScreen(
                     cartViewModel = cartViewModel,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Routes.API) {
+                val apiViewModel: ApiViewModel = viewModel()
+                ApiScreen(
+                    viewModel = apiViewModel,
                     onBack = { navController.popBackStack() }
                 )
             }

@@ -1,6 +1,5 @@
 package com.example.vinilos.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,7 +26,8 @@ import coil.compose.AsyncImage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onViewDetail: (Int) -> Unit
+    onViewDetail: (Int) -> Unit,
+    onOpenApi: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -39,7 +41,8 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(20.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -81,6 +84,15 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text("Ver Mas")
+                    }
+
+                    Spacer(modifier = Modifier.height(30.dp))
+
+                    Button(
+                        onClick = { onOpenApi() },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Probar Api")
                     }
                 }
             }

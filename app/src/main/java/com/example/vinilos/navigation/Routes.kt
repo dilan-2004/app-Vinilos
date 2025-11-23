@@ -14,5 +14,7 @@ object Routes {
 
     const val CART = "cart"
 
+    const val API = "api"
+
     fun detailRoute(id: Int) = "detail/$id"
 }
