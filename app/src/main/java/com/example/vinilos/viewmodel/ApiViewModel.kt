@@ -31,7 +31,6 @@ class ApiViewModel(
                 _vinyls.value = repository.getProducts()
             } catch (e: Exception) {
                 _error.value = "Error: ${e.message}"
-                Log.e("ApiViewModel", "Error cargando productos", e)
             } finally {
                 _loading.value = false
             }

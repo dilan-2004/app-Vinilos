@@ -45,6 +45,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.7.0"
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -83,13 +90,28 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation(libs.androidx.material3)
 
+    // Kotest
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
+
+    // JUnit5
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
+    // Mockk
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+
     // Para ver UI previews
     debugImplementation("androidx.compose.ui:ui-tooling:1.7.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.0")
 
     // Testing
-    testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.0")
+
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
