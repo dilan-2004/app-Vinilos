@@ -35,6 +35,7 @@ import com.google.firebase.ktx.Firebase
 
 @Composable
 fun AppNavigation() {
+    val apiViewModel: ApiViewModel = viewModel()
     val navController = rememberNavController()
     val context = LocalContext.current
     val authViewModel: AuthViewModel = viewModel(
@@ -96,6 +97,7 @@ fun AppNavigation() {
 
             composable(Routes.PRODUCTS) {
                 ProductScreen(
+                    viewModel = apiViewModel,
                     onProductClick = { id ->
                         navController.navigate(Routes.detailRoute(id))
                     },
@@ -146,7 +148,6 @@ fun AppNavigation() {
             }
 
             composable(Routes.API) {
-                val apiViewModel: ApiViewModel = viewModel()
                 ApiScreen(
                     viewModel = apiViewModel,
                     onBack = { navController.popBackStack() }

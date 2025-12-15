@@ -10,16 +10,25 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import com.example.vinilos.data.model.SampleVinyls
-import com.example.vinilos.data.model.Vinyl
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.vinilos.viewmodel.ApiViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductScreen(
+    viewModel: ApiViewModel,
     onProductClick: (Int) -> Unit,
     onBack: () -> Unit) {
 
-    val vinylList: List<Vinyl> = SampleVinyls.vinyls
+    val vinylList by viewModel.vinyls.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadVinyls()
+    }
+
+
 
     Scaffold(
         topBar = {
