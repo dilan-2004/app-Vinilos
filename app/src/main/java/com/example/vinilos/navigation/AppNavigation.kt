@@ -1,15 +1,20 @@
 package com.example.vinilos.navigation
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.navArgument
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -19,7 +24,6 @@ import com.example.vinilos.ui.screens.ProductScreen
 import com.example.vinilos.ui.screens.ContactScreen
 import com.example.vinilos.ui.screens.ProfileScreen
 import com.example.vinilos.auth.RegisterScreen
-import com.example.vinilos.data.model.SampleVinyls
 import com.example.vinilos.data.repository.AuthRepository
 import com.example.vinilos.ui.screens.ApiScreen
 import com.example.vinilos.ui.screens.CartScreen
@@ -110,17 +114,28 @@ fun AppNavigation() {
                 arguments = listOf(navArgument("id") { type = NavType.IntType })
             ) { entry ->
                 val id = entry.arguments?.getInt("id")!!
-                val vinyl = SampleVinyls.vinyls.find { it.id == id }
+                val vinyls by apiViewModel.vinyls.collectAsState()
+                val vinyl = vinyls.find { it.id == id }
 
                 if (vinyl != null) {
                     ProductDetailScreen(
                         vinyl = vinyl,
                         cartViewModel = cartViewModel,
                         onBack = { navController.popBackStack() }
-
                     )
                 } else {
-                    Text("No se encontró el producto")
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text("Producto no encontrado")
+                        Spacer(Modifier.height(16.dp))
+                        Button(onClick = { navController.popBackStack() }) {
+                            Text("Volver")
+                        }
+                    }
                 }
             }
             composable(Routes.CONTACT) {
